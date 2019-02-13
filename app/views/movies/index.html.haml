@@ -21,12 +21,5 @@
       %th Modify
   %tbody
     - @movies.each_with_index do |movie, index|
-      %tr
-        %td= index + 1
-        %td= movie.title
-        %td= movie.rating
-        %td= movie.release_date
-        %td= link_to "More about #{movie.title}", movie_path(movie)
-        %td= (link_to "Edit", edit_movie_path(movie)) + "   " + (link_to "Delete", movie_path(movie), :method => :delete, :data => {:confirm => 'Are you sure?'})
-
+      =render 'movie', :movie => movie, :index => index
 = link_to 'Add new movie', new_movie_path
