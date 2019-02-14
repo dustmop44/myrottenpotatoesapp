@@ -32,6 +32,7 @@ class MoviesController < ApplicationController
     end
     
     def new
+        @movie = Movie.new
     end
     
     def create
@@ -50,13 +51,17 @@ class MoviesController < ApplicationController
     
     def update
         @movie = Movie.find(params[:id])
-        @movie.update_attributes!(movie_params)
-        respond_to do |client_wants|
-            client_wants.html { 
-                flash[:notice] = "#{@movie.title} has been successfully updated."
-                redirect_to movie_path(@movie)
-            }
-            client_wants.xml { render :xml => @movie.to_xml }
+        if @movie.update_attributes(movie_params)
+            flash[:notice] = "#{@movie.title} was successfully updated."
+            respond_to do |client_wants|
+                client_wants.html { 
+                    flash[:notice] = "#{@movie.title} has been successfully updated."
+                    redirect_to movie_path(@movie)
+                }
+                client_wants.xml { render :xml => @movie.to_xml }
+            end
+        else
+            render 'edit'
         end
         
     end

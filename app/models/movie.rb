@@ -1,4 +1,22 @@
 class Movie < ActiveRecord::Base
+  before_save :capitalize_title
+  def self.all_ratings
+    return ['G', 'PG', 'PG-13', 'R', 'NC-17']
+  end
+  validates :title, :presence => true
+  validates :release_date, :presence => true
+  validate :released_1888_or_later
+  validates :rating, :inclusion => {:in => Movie.all_ratings}, :unless => :grandfathered?
+  
+  def released_1888_or_later
+    errors.add(:release_date, 'must be 1888 or later') if
+      release_date && release_date < Date.parse('1 Jan 1888')
+  end
+  
+  @@grandfathered_date = Date.parse('1 Nov 1968')
+  def grandfathered?
+    release_date && release_date >= @@grandfathered_date
+  end
   
   def self.ratings_present
     @list_of_ratings = []
@@ -40,8 +58,9 @@ class Movie < ActiveRecord::Base
     end
   end
   
-  def self.all_ratings
-    return ['G', 'PG', 'PG-13', 'R', 'NC-17']
+  def capitalize_title
+    self.title = self.title.split(/\s+/).map(&:downcase).map(&:capitalize).join(' ')
   end
+  
     
 end
