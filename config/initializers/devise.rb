@@ -8,7 +8,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'dddf6a8bb408cdbe0eec76808daaba968fbd2b0d5cefc40eeece22811aef921149ea5730d3601da09a135fa272d2e36b9aa928cff44fa7f1954e0367f11a2d35'
+  # config.secret_key = '22eb84dbd77613bd63e72b0de84ceba44c5035aebff7bb4208011270fde539842cd19a6cf07cb67712b8b8a972368f6e0868c587bd4ff07c95233a6f727f155e'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -114,7 +114,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 11
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '32c1664ef8ff00c7e03658ab90de83cdbf67ab78eadd44e5f80ccfe81e810b8bc52eb03808e6070209e0ca6374c101fa7c0b7b2d521a442a1b21aca0d2b2a02a'
+  # config.pepper = '81265d07d41da18c591ee868f91e6c674943817ef4c9cb927a138f0677a9e5bfc197dd9187e4e78f537305fc61fab900617c0b7166f6728a7eb09995ddc3dc1c'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -260,6 +260,7 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  config.omniauth :facebook, ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'], callback_url: "https://limitless-sierra-88268.herokuapp.com/users/auth/facebook/callback"
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -296,6 +297,4 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
-  
-  config.omniauth :facebook, "378721602939958", "c0112c0541d4e55207a89ec2f1b087e5", callback_url: "https://limitless-sierra-88268.herokuapp.com/moviegoers/auth/facebook/callback"
 end
