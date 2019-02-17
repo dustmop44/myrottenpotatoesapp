@@ -29,12 +29,24 @@ class MoviesController < ApplicationController
     
     def movies_with_filters
       @movies = Movie.filter_by_rating(params[:ratings], params[:sort_by])
-      if params[:threshold]
-          @movies = @movies.with_good_reviews(params[:threshold][:with_good_reviews])
+      if params[:threshold].nil?
+        if session[:threshold].nil?
+          params[:threshold][:with_good_reviews] = "1"
+        end
       end
+      session[:threshold] = {}
+      session[:threshold][:with_good_reviews] = params[:threshold][:with_good_reviews]
+      @threshold = params[:threshold][:with_good_reviews]
+      @movies = @movies.with_good_reviews(params[:threshold][:with_good_reviews])
+      if params[:no_reviews].nil?
+        if session[:no_reviews].nil?
+          params[:no_reviews] == "1"
+        end
+      end
+      session[:no_reviews] = params[:no_reviews]
       if params[:no_reviews] == "1"
           @movies = Movie.no_reviews(@movies)
-          @no_reviews = 1
+          @no_reviews = "1"
       end
       @movies = Movie.where(id: @movies.map(&:id))
       %w(for_kids).each do |filter|
