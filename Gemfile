@@ -37,6 +37,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'haml'
 
 gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
 
 gem 'devise'
 

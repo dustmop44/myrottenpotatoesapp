@@ -20,10 +20,29 @@ class MoviesController < ApplicationController
       else
         session[:sort_by] = params[:sort_by]
       end
-      @movies = (Movie.filter_by_rating(params[:ratings], params[:sort_by]))
+      movies_with_filters
+      #filter_by_rating(params[:ratings], params[:sort_by]).no_reviews
       @ratings = params[:ratings]
       @sort_by = (!params[:sort_by].nil? ? params[:sort_by].to_s : nil)
       @all_ratings = Movie.ratings_present
+    end
+    
+    def movies_with_filters
+      @movies = Movie.filter_by_rating(params[:ratings], params[:sort_by])
+      if params[:threshold]
+          @movies = @movies.with_good_reviews(params[:threshold][:with_good_reviews])
+      end
+      if params[:no_reviews] == "1"
+          @movies = Movie.no_reviews(@movies)
+          @no_reviews = 1
+      end
+      @movies = Movie.where(id: @movies.map(&:id))
+      %w(for_kids).each do |filter|
+        if params[filter] == "1"
+          @movies = @movies.send(filter)
+          instance_variable_set("@#{filter}", 1)
+        end
+      end
     end
     
     def show

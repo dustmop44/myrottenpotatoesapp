@@ -1,4 +1,5 @@
-class Movie < ActiveRecord::Base
+class Movie < ApplicationRecord
+  has_many :reviews
   before_save :capitalize_title
   def self.all_ratings
     return ['G', 'PG', 'PG-13', 'R', 'NC-17']
@@ -18,8 +19,25 @@ class Movie < ActiveRecord::Base
     release_date && release_date >= @@grandfathered_date
   end
   
+  scope :with_good_reviews, lambda { |threshold|
+    Movie.joins(:reviews).group(:movie_id).
+      having(['AVG(reviews.potatoes) > ?', threshold])
+  }
+  
+  scope :for_kids, lambda { Movie.where(rating: ['G', 'PG']) }
+  
+  scope :recently_reviewed, lambda { |n| Movie.joins(:reviews).where(['reviews.created_at >= ?', n.days.ago]).uniq }
+  
+  def self.no_reviews(movies)
+    return movies + Movie.includes(:reviews).where(reviews: {movie_id: nil})
+  end
+  
+  
   def self.ratings_present
     @list_of_ratings = []
+    if Movie.all.empty?
+      return ['G', 'PG', 'PG-13', 'R', 'NC-17']
+    end
     Movie.all.each do |movie|
       if @list_of_ratings.include? movie.rating
         next
