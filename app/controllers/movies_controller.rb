@@ -32,10 +32,13 @@ class MoviesController < ApplicationController
       if params[:threshold].nil?
         if session[:threshold].nil?
           params[:threshold][:with_good_reviews] = "1"
+          session[:threshold] = Hash.new
+          session[:threshold][:with_good_reviews] = params[:threshold][:with_good_reviews]
+        else
+          params[:threshold] = Hash.new
+          params[:threshold][:with_good_reviews] = session[:threshold][:with_good_reviews]
         end
       end
-      session[:threshold] = {}
-      session[:threshold][:with_good_reviews] = params[:threshold][:with_good_reviews]
       @threshold = params[:threshold][:with_good_reviews]
       @movies = @movies.with_good_reviews(params[:threshold][:with_good_reviews])
       if params[:no_reviews].nil?
