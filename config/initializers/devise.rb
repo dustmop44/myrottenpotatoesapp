@@ -262,7 +262,7 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   #config.omniauth :facebook, ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'], callback_url: "https://limitless-sierra-88268.herokuapp.com/users/auth/facebook/callback"
   config.omniauth :facebook, '378721602939958', 'c0112c0541d4e55207a89ec2f1b087e5', callback_url: "https://ca17ddeb447246459526a43ef00c31bb.vfs.cloud9.us-east-1.amazonaws.com/users/auth/facebook/callback"
-  #config.omniauth :google_oauth2, '788799594825-bg0dgfho7ueheba7nn8sbri46dgt2c3b.apps.googleusercontent.com', 'oPkyknRAUw20X5gFWUpXEI--', callback_url: "https://ca17ddeb447246459526a43ef00c31bb.vfs.cloud9.us-east-1.amazonaws.com/users/auth/google/callback"
+  config.omniauth :google_oauth2, '788799594825-bg0dgfho7ueheba7nn8sbri46dgt2c3b.apps.googleusercontent.com', 'oPkyknRAUw20X5gFWUpXEI--', callback_url: "https://ca17ddeb447246459526a43ef00c31bb.vfs.cloud9.us-east-1.amazonaws.com/users/auth/google/callback"
   
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

@@ -30,12 +30,12 @@ class MoviesController < ApplicationController
     def movies_with_filters
       @movies = Movie.filter_by_rating(params[:ratings], params[:sort_by])
       if params[:threshold].nil?
+        params[:threshold] = Hash.new
         if session[:threshold].nil?
           params[:threshold][:with_good_reviews] = "1"
           session[:threshold] = Hash.new
           session[:threshold][:with_good_reviews] = params[:threshold][:with_good_reviews]
         else
-          params[:threshold] = Hash.new
           params[:threshold][:with_good_reviews] = session[:threshold][:with_good_reviews]
         end
       end
