@@ -94,3 +94,12 @@ div.field_with_errors input {
   background-color: yellow;
   font-weight: bold;
 }
+
+#potato {
+  width: 30px;
+  height: 30px;
+}
+
+#user {
+  color: #A86E61;
+}

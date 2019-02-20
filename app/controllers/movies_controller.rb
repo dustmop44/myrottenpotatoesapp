@@ -32,31 +32,39 @@ class MoviesController < ApplicationController
       if params[:threshold].nil?
         params[:threshold] = Hash.new
         if session[:threshold].nil?
-          params[:threshold][:with_good_reviews] = "1"
+          params[:threshold]["with_good_reviews"] = "1"
           session[:threshold] = Hash.new
-          session[:threshold][:with_good_reviews] = params[:threshold][:with_good_reviews]
+          session[:threshold]["with_good_reviews"] = params[:threshold]["with_good_reviews"]
         else
-          params[:threshold][:with_good_reviews] = session[:threshold][:with_good_reviews]
+          params[:threshold]["with_good_review"] = session[:threshold]["with_good_reviews"]
         end
       end
-      @threshold = params[:threshold][:with_good_reviews]
-      @movies = @movies.with_good_reviews(params[:threshold][:with_good_reviews])
+      @threshold = params[:threshold]["with_good_reviews"]
+      @movies = @movies.with_good_reviews(params[:threshold]["with_good_reviews"])
       if params[:no_reviews].nil?
         if session[:no_reviews].nil?
-          params[:no_reviews] == "1"
+          session[:no_reviews] = "1"
         end
+        params[:no_reviews] = session[:no_reviews]
+      end
+      if params[:no_reviews] == "1"
+        @movies = Movie.no_reviews(@movies)
+        @no_reviews = "1"
       end
       session[:no_reviews] = params[:no_reviews]
-      if params[:no_reviews] == "1"
-          @movies = Movie.no_reviews(@movies)
-          @no_reviews = "1"
-      end
       @movies = Movie.where(id: @movies.map(&:id))
       %w(for_kids).each do |filter|
+        if params[filter].nil?
+          if session[filter].nil?
+            session[filter] = "0"
+          end
+          params[filter] = session[filter]
+        end
         if params[filter] == "1"
           @movies = @movies.send(filter)
-          instance_variable_set("@#{filter}", 1)
         end
+        instance_variable_set("@#{filter}", params[filter])
+        session[filter] = params[filter]
       end
     end
     

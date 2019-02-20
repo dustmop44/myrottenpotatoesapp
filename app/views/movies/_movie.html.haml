@@ -1,4 +1,4 @@
-%tr
+%tr{:class => ('adult' unless movie.rating =~ /^G|PG$/)}
   %td= index + 1
   %td= movie.title
   %td= movie.rating

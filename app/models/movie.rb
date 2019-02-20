@@ -21,7 +21,7 @@ class Movie < ApplicationRecord
   
   scope :with_good_reviews, lambda { |threshold|
     Movie.joins(:reviews).group(:movie_id).
-      having(['AVG(reviews.potatoes) > ?', threshold])
+      having(['AVG(reviews.potatoes) >= ?', threshold.to_i])
   }
   
   scope :for_kids, lambda { Movie.where(rating: ['G', 'PG']) }

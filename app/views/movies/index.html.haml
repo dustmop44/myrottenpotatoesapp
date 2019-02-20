@@ -1,21 +1,23 @@
-
+%h1 All Movies
 = form_tag movies_path, :method => :get, :id => "ratings_form" do
   = label "Filters:", "Filters:"
   =hidden_field_tag "sort_by", @sort_by
+  =hidden_field_tag "for_kids", 0
+  =hidden_field_tag "no_reviews", 0
   Include:
   - @all_ratings.each do |rating|
     = rating
     = check_box_tag "ratings[#{rating}]", 1, (@ratings.include?(rating) ? true : false)
+  Kid-Friendly:
+  = check_box_tag :for_kids, 1, (@for_kids == "1" ? true : false)
   %p
   Greater than
   = select :threshold, :with_good_reviews, ['1', '2', '3', '4', '5'], selected: @threshold
   Potato(es)
   (Include Movies with No Reviews:
-  = check_box_tag :no_reviews, 1, ((@no_reviews == "1") ? true : false)
+  = check_box_tag :no_reviews, 1, (@no_reviews ? true : false)
   )
   %p
-  Kid-Friendly:
-  = check_box_tag :for_kids, 1, (@for_kids ? true : false)
   -#= ' Reviewed within'
   -#= select :days_ago, :recently_reviewed, [1..30]
   -#days.
