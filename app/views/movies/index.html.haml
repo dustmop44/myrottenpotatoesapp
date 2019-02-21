@@ -9,7 +9,7 @@
     = rating
     = check_box_tag "ratings[#{rating}]", 1, (@ratings.include?(rating) ? true : false)
   Kid-Friendly:
-  = check_box_tag :for_kids, 1, (@for_kids == "1" ? true : false)
+  = check_box_tag :for_kids, 1, (@for_kids == "1" ? true : false), class: "aria"
   %p
   Greater than
   = select :threshold, :with_good_reviews, ['1', '2', '3', '4', '5'], selected: @threshold
@@ -39,3 +39,5 @@
     - @movies.each_with_index do |movie, index|
       =render 'movie', :movie => movie, :index => index
 = link_to 'Add new movie', new_movie_path
+= link_to 'TestAgain', "javascript:sayhello()"
+
