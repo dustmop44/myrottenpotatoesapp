@@ -71,6 +71,7 @@ class MoviesController < ApplicationController
     def show
         id = params[:id]
         @movie = Movie.find(id)
+        render(:partial => 'moviepop', :object => @movie) if request.xhr?
     end
     
     def new

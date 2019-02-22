@@ -1,0 +1,6 @@
+%p= @movie.title
+%p= @movie.description
+
+= link_to "More Info", movie_path(@movie)
+= link_to 'Edit Movie', edit_movie_path(@movie)
+= link_to 'Close', '', {:id => 'closeLink'}

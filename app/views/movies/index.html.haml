@@ -21,7 +21,7 @@
   -#= ' Reviewed within'
   -#= select :days_ago, :recently_reviewed, [1..30]
   -#days.
-  = submit_tag 'Refresh', :id => "ratings_submit"
+  = submit_tag 'Refresh / Save Settings', :id => "ratings_submit"
 
 %table#movies
   %thead
@@ -39,5 +39,4 @@
     - @movies.each_with_index do |movie, index|
       =render 'movie', :movie => movie, :index => index
 = link_to 'Add new movie', new_movie_path
-= link_to 'TestAgain', "javascript:sayhello()"
 
