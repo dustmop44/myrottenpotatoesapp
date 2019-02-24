@@ -4,4 +4,5 @@ Rails.application.routes.draw do
     resources :reviews
   end
   root 'movies#index'
+  post '/movies/search_tmdb'
 end

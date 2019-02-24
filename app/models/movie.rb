@@ -32,6 +32,21 @@ class Movie < ApplicationRecord
     return movies + Movie.includes(:reviews).where(reviews: {movie_id: nil})
   end
   
+  def self.review_average(movie)
+    total = 0
+    count = 0
+    movie.reviews.each do |review|
+      total += review.potatoes
+      count += 1
+    end
+    if count == 0
+      return nil
+    else
+      (total.to_f/count).round(1)
+    end
+  end
+    
+  
   
   def self.ratings_present
     @list_of_ratings = []
