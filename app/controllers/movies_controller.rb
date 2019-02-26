@@ -28,7 +28,7 @@ class MoviesController < ApplicationController
     end
     
     def movies_with_filters
-      @movies = Movie.filter_by_rating(params[:ratings], params[:sort_by])
+      @movies = Movie.all
       if params[:threshold].nil?
         params[:threshold] = Hash.new
         if session[:threshold].nil?
@@ -52,7 +52,8 @@ class MoviesController < ApplicationController
         @no_reviews = "1"
       end
       session[:no_reviews] = params[:no_reviews]
-      @movies = Movie.where(id: @movies.map(&:id))
+      @movies = Movie.filter_by_rating(params[:ratings], params[:sort_by], @movies)
+      #@movies = Movie.where(id: @movies.map(&:id))
       %w(for_kids).each do |filter|
         if params[filter].nil?
           if session[filter].nil?
@@ -117,9 +118,7 @@ class MoviesController < ApplicationController
     end
     
     def search_tmdb
-      # hardwire to simulate failure
-      flash[:warning] = "'#{params[:search_terms]}' was not found in TMDb."
-      redirect_to movies_path
+      @movies = Movie.find_in_tmdb(params[:search_terms])
     end
     
     private

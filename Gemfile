@@ -40,6 +40,16 @@ gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 
 gem 'devise'
+gem 'themoviedb'
+
+group :test do
+  gem 'rspec-rails'
+  gem 'ZenTest'
+  gem 'rails-controller-testing'
+  gem 'factory_bot_rails'
+  gem 'simplecov', require: false
+  gem 'webmock'
+end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

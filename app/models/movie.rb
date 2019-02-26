@@ -9,6 +9,8 @@ class Movie < ApplicationRecord
   validate :released_1888_or_later
   validates :rating, :inclusion => {:in => Movie.all_ratings}, :unless => :grandfathered?
   
+  class Movie::InvalidKeyError < StandardError ; end
+  
   def released_1888_or_later
     errors.add(:release_date, 'must be 1888 or later') if
       release_date && release_date < Date.parse('1 Jan 1888')
@@ -46,7 +48,17 @@ class Movie < ApplicationRecord
     end
   end
     
-  
+  def self.find_in_tmdb(search_term)
+    begin
+      Tmdb::Movie.find(search_term)
+    rescue NoMethodError => tmdb_gem_exception
+      if Tmdb::Api.response['code'] == '401'
+        raise Movie::InvalidKeyError, 'Invalid API key'
+      else
+        raise tmdb_gem_exception
+      end
+    end
+  end
   
   def self.ratings_present
     @list_of_ratings = []
@@ -63,13 +75,18 @@ class Movie < ApplicationRecord
     return @list_of_ratings.sort
   end
   
-  def self.filter_by_rating(ratings, sort_by)
+  def self.filter_by_rating(ratings, sort_by, movies)
+    ids = Array.new
+    movies.each do |movie|
+      ids << movie.id
+    end
+    returnmovies = Movie.where(id: ids)
     if !ratings.empty? && !sort_by.nil?
-      return Movie.order(sort_by).where(rating: ratings)
+      return returnmovies.order(sort_by).where(rating: ratings)
     elsif !ratings.empty? && sort_by.nil?
-      return Movie.where(rating: ratings)
+      return returnmovies.where(rating: ratings)
     else
-      return Movie.all
+      return returnmovies
     end
   end
   
